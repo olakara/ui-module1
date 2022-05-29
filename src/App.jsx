@@ -1,6 +1,6 @@
 import "./styles.css";
 import * as React from "react";
-import ExampleComponent from "./Components/ExampleComponent";
+import BrandComponent from "./Components/BrandComponent";
 
 const App = (props) => {
   const data = {
@@ -69,16 +69,43 @@ const App = (props) => {
 
   // create a viewmodel here
 
+  const viewModel = {
+    brand: []
+  };
+
+  function getFeatures(brand) {
+    let featuresArray = brand.models.map((model) => {
+      return model.features;
+    });
+    var merged = [].concat.apply([], featuresArray);
+    return merged;
+  }
+
+  data.brand.forEach((brand) => {
+    let hasFinance = brand.models.filter((x) => x.financeApplyLink).length > 0;
+
+    let title = brand.name + " has " + brand.models.length + " cars available";
+    if (hasFinance) {
+      title = title + " (has finance)";
+    }
+
+    let brandVm = {
+      title: title,
+      models: brand.models.map((model) => {
+        return {
+          name: model.modelName
+        };
+      }),
+      features: getFeatures(brand)
+    };
+    console.log("test", brandVm.features);
+    viewModel.brand.push(brandVm);
+  });
+
   return (
     <>
-      <ExampleComponent />
-      {data.brand.map((brand) => {
-        return (
-          <p>
-            {brand.name}
-            {/* Begin Here*/}
-          </p>
-        );
+      {viewModel.brand.map((brand) => {
+        return <BrandComponent vm={brand} />;
       })}
     </>
   );
