@@ -82,18 +82,23 @@ const App = (props) => {
   }
 
   data.brand.forEach((brand) => {
-    let hasFinance = brand.models.filter((x) => x.financeApplyLink).length > 0;
+    let hasFinance =
+      brand.financeLengthInMonths > 0 &&
+      brand.models.filter((x) => x.financeApplyLink).length > 0;
 
     let title = brand.name + " has " + brand.models.length + " cars available";
     if (hasFinance) {
       title = title + " (has finance)";
+    } else {
+      title = title + " (has no finance)";
     }
 
     let brandVm = {
       title: title,
       models: brand.models.map((model) => {
         return {
-          name: model.modelName
+          name: model.modelName,
+          financeLink: model.financeApplyLink
         };
       }),
       features: getFeatures(brand)
