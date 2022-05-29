@@ -15,9 +15,11 @@ const BrandComponent = (props) => {
         })}
       </ul>
       Brand Features:[
-      {props.vm.features.map((feature) => {
-        return feature.name + ",";
-      })}
+      {props.vm.features
+        .map((feature) => {
+          return feature.name;
+        })
+        .join(", ")}
       ]
     </div>
   );
